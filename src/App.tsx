@@ -20,6 +20,7 @@ function App() {
   const [selectedBreed, setSelectedBreed] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [darkMode, setDarkMode] = useState<boolean>(false);
 
   const fetchCats = async (breedId?: string) => {
     setLoading(true);
@@ -46,16 +47,18 @@ function App() {
     fetchCats();
     fetchBreeds();
   }, []);
-  console.log("setCats", cats);
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold mb-6">
-        Task 4. Random Cat Images Gallery
-      </h1>
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
+      } flex flex-col items-center py-10`}
+    >
+      <h1 className="text-3xl font-bold mb-6">🐱 Random Cat Images Gallery</h1>
 
       <div className="flex gap-4 mb-4">
         <select
-          className="p-2 border rounded"
+          className="p-2 border rounded bg-white text-black"
           value={selectedBreed}
           onChange={(e) => {
             setSelectedBreed(e.target.value);
@@ -75,6 +78,13 @@ function App() {
           className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
           {viewMode === "grid" ? "Switch to List View" : "Switch to Grid View"}
+        </button>
+
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
+        >
+          {darkMode ? "Light Mode" : "Dark Mode"}
         </button>
       </div>
 
@@ -96,7 +106,7 @@ function App() {
         {cats.map((cat) => (
           <div
             key={cat.id}
-            className="bg-white rounded-lg shadow-md p-2 flex items-center gap-4"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-2 flex items-center gap-4"
           >
             <img
               src={cat.url}
@@ -108,7 +118,9 @@ function App() {
               }`}
             />
             {viewMode === "list" && (
-              <p className="text-gray-700">Cat ID: {cat.id}</p>
+              <p className="text-gray-700 dark:text-gray-300">
+                Cat ID: {cat.id}
+              </p>
             )}
           </div>
         ))}
